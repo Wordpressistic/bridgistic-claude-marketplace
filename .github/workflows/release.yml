@@ -146,7 +146,7 @@ jobs:
           V="${{ steps.ver.outputs.version }}"
           NAME="io.github.Wordpressistic/bridgistic"
           ENCODED="${NAME//\//%2F}"
-          if curl -fsSL "https://registry.modelcontextprotocol.io/v0.1/servers/${ENCODED}/versions" > "$RUNNER_TEMP/mcp-registry-versions.json"; then
+          if curl --connect-timeout 10 --max-time 30 -fsSL "https://registry.modelcontextprotocol.io/v0.1/servers/${ENCODED}/versions" > "$RUNNER_TEMP/mcp-registry-versions.json"; then
             if jq -e --arg version "$V" '.servers[]?.server.version == $version' "$RUNNER_TEMP/mcp-registry-versions.json" >/dev/null; then
               echo "::notice::${NAME}@${V} is already published — the registry publish step will skip it."
               echo "already=true" >> "$GITHUB_OUTPUT"
