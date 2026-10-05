@@ -207,6 +207,9 @@ jobs:
     needs: [preflight, build]
     if: ${{ !inputs.dry_run }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
@@ -229,6 +232,14 @@ jobs:
           name: release-v${{ needs.preflight.outputs.version }}
           path: release-artifacts
 
+      - name: Verify OIDC context is available
+        env:
+          NODE_AUTH_TOKEN: ""
+        run: |
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_URL"
+          test -n "$ACTIONS_ID_TOKEN_REQUEST_TOKEN"
+          echo "GitHub OIDC context is available for trusted publishing."
+
       # Publishing the tarball Phase B already built and verified, rather than
       # re-packing, is what guarantees the published bytes are the checksummed
       # bytes.
@@ -240,6 +251,8 @@ jobs:
 
       - name: Publish to npm
         if: needs.preflight.outputs.npm_published != 'true'
+        env:
+          NODE_AUTH_TOKEN: ""
         run: |
           # setup-node creates the registry config, but any inherited token
           # would make npm choose token auth before attempting OIDC exchange.

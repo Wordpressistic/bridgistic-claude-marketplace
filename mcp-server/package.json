@@ -43,7 +43,7 @@
   "homepage": "https://github.com/wordpressistic/bridgistic-claude-marketplace",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wordpressistic/bridgistic-claude-marketplace"
+    "url": "git+https://github.com/wordpressistic/bridgistic-claude-marketplace.git"
   },
   "bugs": {
     "url": "https://github.com/wordpressistic/bridgistic-claude-marketplace/issues"
