@@ -7,6 +7,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 Nothing yet.
 
+## [1.5.1] — 2026-10-05
+
+Corrective patch release for organization-owned MCP publishing.
+
+### Fixed
+
+- Aligned the npm package MCP name with the exact WordPressistic-owned registry namespace `io.github.Wordpressistic/bridgistic`.
+- Kept the free-only distribution and premium feature locks unchanged from 1.5.0.
+
 ## [1.5.0] — 2026-10-05
 
 The free-only public release: the local bridge remains fully functional while
