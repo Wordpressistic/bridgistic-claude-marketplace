@@ -288,6 +288,14 @@ jobs:
           NODE_AUTH_TOKEN: ""
         run: |
           V="${{ needs.preflight.outputs.version }}"
+          # Preflight runs in a separate job and npm metadata can lag between
+          # jobs. Re-check here so a delayed preflight cannot attempt an
+          # immutable version a second time.
+          if [ "$(npm view "bridgistic-mcp-server@$V" version 2>/dev/null)" = "$V" ]; then
+            echo "bridgistic-mcp-server@$V became visible on npm after preflight; skipping the immutable publish."
+            exit 0
+          fi
+
           # The ./ prefix is load-bearing. npm-package-arg only treats a spec as
           # a file path when it starts with ./, ../, /, ~/, or a drive letter;
           # otherwise a spec with exactly one slash matches the GitHub
@@ -295,20 +303,41 @@ jobs:
           # "release-artifacts/bridgistic-mcp-server-1.2.0.tgz" as a repo and
           # tried `git ls-remote ssh://git@github.com/release-artifacts/...git`,
           # failing with exit 128 mid-release.
-          if [ -n "${NPM_TOKEN:-}" ]; then
-            printf 'registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$RUNNER_TEMP/npm-token.npmrc"
-            NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npm-token.npmrc" \
-              npm publish --provenance --loglevel verbose --access public \
-              "./release-artifacts/bridgistic-mcp-server-${V}.tgz"
-          else
-            # setup-node creates the registry config, but any inherited token
-            # would make npm choose token auth before attempting OIDC exchange.
-            unset NODE_AUTH_TOKEN
-            printf 'registry=https://registry.npmjs.org/\n' > "$RUNNER_TEMP/npm-oidc.npmrc"
-            NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npm-oidc.npmrc" \
-              npm publish --provenance --loglevel verbose --access public \
-              "./release-artifacts/bridgistic-mcp-server-${V}.tgz"
+          publish_npm() {
+            if [ -n "${NPM_TOKEN:-}" ]; then
+              printf 'registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$RUNNER_TEMP/npm-token.npmrc"
+              NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npm-token.npmrc" \
+                npm publish --provenance --loglevel verbose --access public \
+                "./release-artifacts/bridgistic-mcp-server-${V}.tgz"
+            else
+              # setup-node creates the registry config, but any inherited token
+              # would make npm choose token auth before attempting OIDC exchange.
+              unset NODE_AUTH_TOKEN
+              printf 'registry=https://registry.npmjs.org/\n' > "$RUNNER_TEMP/npm-oidc.npmrc"
+              NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npm-oidc.npmrc" \
+                npm publish --provenance --loglevel verbose --access public \
+                "./release-artifacts/bridgistic-mcp-server-${V}.tgz"
+            fi
+          }
+
+          if publish_npm; then
+            exit 0
           fi
+
+          # If npm accepted the publish but the client received a late error,
+          # allow metadata propagation before deciding that the release failed.
+          for attempt in 1 2 3 4 5; do
+            if [ "$(npm view "bridgistic-mcp-server@$V" version 2>/dev/null)" = "$V" ]; then
+              echo "bridgistic-mcp-server@$V is live after the publish response; continuing."
+              exit 0
+            fi
+            if [ "$attempt" -lt 5 ]; then
+              echo "npm publish did not complete; waiting 10 seconds before checking again."
+              sleep 10
+            fi
+          done
+          echo "::error::npm publication failed and $V is not visible after 5 checks."
+          exit 1
 
       - name: Publish to the MCP Registry
         if: needs.preflight.outputs.registry_published != 'true'
