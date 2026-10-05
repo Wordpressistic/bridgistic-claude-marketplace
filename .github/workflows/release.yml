@@ -183,7 +183,12 @@ jobs:
 
       # Rehearse the exact publish command, with the exact spec string Phase C
       # will use, before anything is public. --dry-run runs npm's full spec
-      # resolution and packaging and stops short of the upload.
+      # resolution and packaging and stops short of the upload. npm still
+      # checks the live registry during a dry run, however, and rejects a
+      # version that preflight has already confirmed is public. In that retry
+      # case the immutable npm publish is intentionally skipped; the artifact
+      # build and checksum gates below still run, and the remaining registry
+      # and GitHub-release work can recover independently.
       #
       # This gate exists because its absence cost a release: Phase C's spec was
       # "release-artifacts/<file>.tgz", which npm resolved as a GitHub
@@ -194,6 +199,7 @@ jobs:
       # (it only warns), so the rehearsal does not need the secret and should
       # not be handed one.
       - name: Rehearse the npm publish (dry run)
+        if: needs.preflight.outputs.npm_published != 'true'
         run: |
           V="${{ needs.preflight.outputs.version }}"
           # Staged in a temp directory that mirrors Phase C's layout exactly —
@@ -206,6 +212,10 @@ jobs:
           cd "$RUNNER_TEMP/publish-rehearsal"
           npm publish --dry-run --access public "./release-artifacts/bridgistic-mcp-server-${V}.tgz"
           echo "npm resolved the tarball as a file and packaged it cleanly."
+
+      - name: Confirm npm rehearsal was intentionally skipped
+        if: needs.preflight.outputs.npm_published == 'true'
+        run: echo "npm already contains bridgistic-mcp-server@${{ needs.preflight.outputs.version }}; publish and rehearsal are skipped for this immutable version."
 
       - name: Show checksums
         run: cat "dist/release-v${{ needs.preflight.outputs.version }}/SHA256SUMS.txt"
