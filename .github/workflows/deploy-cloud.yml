@@ -39,6 +39,8 @@ name: Deploy Cloud Worker
 
 on:
   workflow_dispatch:
+  release:
+    types: [published]
   push:
     tags: ["cloud-v*"]
 
