@@ -25,13 +25,13 @@
   },
   "author": "WordPressistic",
   "license": "GPL-2.0-or-later",
-  "homepage": "https://github.com/wordpressistic/bridgistic",
+  "homepage": "https://github.com/wordpressistic/bridgistic-claude-marketplace",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wordpressistic/bridgistic.git"
+    "url": "git+https://github.com/wordpressistic/bridgistic-claude-marketplace.git"
   },
   "bugs": {
-    "url": "https://github.com/wordpressistic/bridgistic/issues"
+    "url": "https://github.com/wordpressistic/bridgistic-claude-marketplace/issues"
   },
   "keywords": [
     "mcp",

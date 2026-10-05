@@ -9,7 +9,7 @@
     "url": "https://wordpressistic.com"
   },
   "homepage": "https://bridgistic.app/",
-  "repository": "https://github.com/wordpressistic/bridgistic",
+  "repository": "https://github.com/wordpressistic/bridgistic-claude-marketplace",
   "license": "GPL-2.0-or-later",
   "keywords": [
     "wordpress",
@@ -33,8 +33,8 @@
           "Manage approved WordPress tasks"
         ],
         "websiteURL": "https://bridgistic.app/",
-        "supportURL": "https://github.com/wordpressistic/bridgistic/issues",
-        "privacyPolicyURL": "https://github.com/wordpressistic/bridgistic/blob/main/docs/PRIVACY.md",
+        "supportURL": "https://github.com/wordpressistic/bridgistic-claude-marketplace/issues",
+        "privacyPolicyURL": "https://github.com/wordpressistic/bridgistic-claude-marketplace/blob/main/docs/PRIVACY.md",
         "termsOfServiceURL": "https://wordpressistic.com/terms",
         "defaultPrompt": [
           "Inspect my WordPress site with read-only access.",

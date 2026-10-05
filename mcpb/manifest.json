@@ -10,15 +10,15 @@
     "email": "support@wordpressistic.com",
     "url": "https://wordpressistic.com"
   },
-  "homepage": "https://github.com/wordpressistic/bridgistic",
-  "documentation": "https://github.com/wordpressistic/bridgistic/blob/main/docs/CLAUDE_DESKTOP.md",
-  "support": "https://github.com/wordpressistic/bridgistic/issues",
+  "homepage": "https://github.com/wordpressistic/bridgistic-claude-marketplace",
+  "documentation": "https://github.com/wordpressistic/bridgistic-claude-marketplace/blob/main/docs/CLAUDE_DESKTOP.md",
+  "support": "https://github.com/wordpressistic/bridgistic-claude-marketplace/issues",
   "privacy_policies": [
-    "https://github.com/wordpressistic/bridgistic/blob/main/docs/PRIVACY.md"
+    "https://github.com/wordpressistic/bridgistic-claude-marketplace/blob/main/docs/PRIVACY.md"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/wordpressistic/bridgistic"
+    "url": "https://github.com/wordpressistic/bridgistic-claude-marketplace"
   },
   "license": "GPL-2.0-or-later",
   "keywords": [
