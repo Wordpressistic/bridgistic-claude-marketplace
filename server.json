@@ -3,7 +3,7 @@
   "name": "io.github.wordpressistic/bridgistic",
   "description": "Connect Claude to WordPress safely: signed requests, scoped keys, approvals, logs, snapshots.",
   "repository": {
-    "url": "https://github.com/wordpressistic/bridgistic-claude-marketplace",
+    "url": "https://github.com/Wordpressistic/bridgistic-claude-marketplace",
     "source": "github"
   },
   "version": "1.5.0",

@@ -40,13 +40,13 @@
   },
   "author": "Shuvo Sarker (WordPressistic)",
   "license": "GPL-2.0-or-later",
-  "homepage": "https://github.com/wordpressistic/bridgistic-claude-marketplace",
+  "homepage": "https://github.com/Wordpressistic/bridgistic-claude-marketplace",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wordpressistic/bridgistic-claude-marketplace.git"
+    "url": "https://github.com/Wordpressistic/bridgistic-claude-marketplace"
   },
   "bugs": {
-    "url": "https://github.com/wordpressistic/bridgistic-claude-marketplace/issues"
+    "url": "https://github.com/Wordpressistic/bridgistic-claude-marketplace/issues"
   },
   "keywords": [
     "mcp",
