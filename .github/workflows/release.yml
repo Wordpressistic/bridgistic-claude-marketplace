@@ -215,6 +215,15 @@ jobs:
           node-version: 24
           registry-url: "https://registry.npmjs.org"
 
+      # Trusted publishing requires npm 11.5.1 or newer. Keep this explicit so
+      # the release cannot silently fall back to token-only authentication when
+      # the Node distribution's bundled npm changes.
+      - name: Ensure npm supports trusted publishing
+        run: |
+          npm install --global "npm@^11.5.1"
+          node --version
+          npm --version
+
       - uses: actions/download-artifact@v4
         with:
           name: release-v${{ needs.preflight.outputs.version }}
