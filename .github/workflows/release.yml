@@ -315,8 +315,23 @@ jobs:
         run: |
           curl -sSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
           ./mcp-publisher login github-oidc
-          ./mcp-publisher publish
-          echo "Published io.github.Wordpressistic/bridgistic to registry.modelcontextprotocol.io"
+          # The registry validates the npm package immediately. npm and the
+          # registry are eventually consistent, and the registry can also
+          # briefly return a database connection error. Retry only this
+          # idempotent publication step; npm publishing and release creation
+          # remain single-shot and immutable/order-sensitive.
+          for attempt in 1 2 3 4 5; do
+            if ./mcp-publisher publish; then
+              echo "Published io.github.Wordpressistic/bridgistic to registry.modelcontextprotocol.io"
+              exit 0
+            fi
+            if [ "$attempt" -lt 5 ]; then
+              echo "Registry publish attempt $attempt failed; waiting 20 seconds before retrying."
+              sleep 20
+            fi
+          done
+          echo "::error::MCP Registry publication failed after 5 attempts."
+          exit 1
 
       # The GitHub release goes last because it is the only step that is
       # editable afterwards — if npm or the registry had failed, nothing public
