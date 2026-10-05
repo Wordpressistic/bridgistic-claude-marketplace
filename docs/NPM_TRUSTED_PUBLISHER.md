@@ -9,15 +9,17 @@
 
 ## Trusted publishing
 
-The release workflow uses GitHub Actions OIDC trusted publishing. It does not require a
-long-lived `NPM_TOKEN` in the organization repository.
+The workflow prefers GitHub Actions OIDC trusted publishing. However, GitHub repositories
+created after July 15, 2026 receive immutable OIDC subject claims, and npm's registry
+currently rejects those claims during token exchange. The workflow therefore includes a
+repository-scoped `NPM_TOKEN` fallback until npm supports the immutable subject format.
 
 The npm package trusted-publisher connection must match these values exactly:
 
 | npm field | Value |
 | --- | --- |
 | Provider | GitHub Actions |
-| Organization or user | `wordpressistic` |
+| Organization or user | `Wordpressistic` |
 | Repository | `bridgistic-claude-marketplace` |
 | Workflow filename | `release.yml` |
 | Environment name | Leave blank |
@@ -27,6 +29,12 @@ The workflow grants `id-token: write`, uses Node.js 24 (with an npm version that
 trusted publishing), builds the package once, and publishes the verified tarball. The package
 metadata, MCP manifest, OpenAI plugin manifest, and Claude Desktop manifest all point to the
 organization repository.
+
+For the current token fallback, add `NPM_TOKEN` to the **marketplace repository** (not only
+`Wordpressistic/bridgistic`) and use an npm token permitted by the package's publishing-access
+policy. Do not put the token in source control, documentation, or chat. When npm fixes support
+for immutable OIDC subjects, remove the fallback and return the package to the most restrictive
+2FA setting.
 
 ## Release procedure
 
