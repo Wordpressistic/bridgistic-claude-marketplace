@@ -241,6 +241,10 @@ jobs:
       - name: Publish to npm
         if: needs.preflight.outputs.npm_published != 'true'
         run: |
+          # setup-node creates the registry config, but any inherited token
+          # would make npm choose token auth before attempting OIDC exchange.
+          unset NODE_AUTH_TOKEN
+          unset NPM_TOKEN
           V="${{ needs.preflight.outputs.version }}"
           # The ./ prefix is load-bearing. npm-package-arg only treats a spec as
           # a file path when it starts with ./, ../, /, ~/, or a drive letter;
