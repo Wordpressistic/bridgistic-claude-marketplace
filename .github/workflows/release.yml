@@ -46,6 +46,7 @@ jobs:
       version: ${{ steps.ver.outputs.version }}
       tag: ${{ steps.ver.outputs.tag }}
       npm_published: ${{ steps.npmcheck.outputs.already }}
+      registry_published: ${{ steps.registrycheck.outputs.already }}
     steps:
       - uses: actions/checkout@v4
 
@@ -135,6 +136,23 @@ jobs:
           if [ -n "$(npm view "bridgistic-mcp-server@$V" version 2>/dev/null)" ]; then
             echo "::notice::bridgistic-mcp-server@$V is already published — the publish step will skip it."
             echo "already=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Is this version already in the MCP Registry?
+        id: registrycheck
+        run: |
+          V="${{ steps.ver.outputs.version }}"
+          NAME="io.github.Wordpressistic/bridgistic"
+          ENCODED="${NAME//\//%2F}"
+          if curl -fsSL "https://registry.modelcontextprotocol.io/v0.1/servers/${ENCODED}/versions" > "$RUNNER_TEMP/mcp-registry-versions.json"; then
+            if jq -e --arg version "$V" '.servers[]?.server.version == $version' "$RUNNER_TEMP/mcp-registry-versions.json" >/dev/null; then
+              echo "::notice::${NAME}@${V} is already published — the registry publish step will skip it."
+              echo "already=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "already=false" >> "$GITHUB_OUTPUT"
+            fi
           else
             echo "already=false" >> "$GITHUB_OUTPUT"
           fi
@@ -283,12 +301,12 @@ jobs:
           fi
 
       - name: Publish to the MCP Registry
-        if: needs.preflight.outputs.npm_published != 'true'
+        if: needs.preflight.outputs.registry_published != 'true'
         run: |
           curl -sSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
           ./mcp-publisher login github-oidc
           ./mcp-publisher publish
-          echo "Published io.github.wordpressistic/bridgistic to registry.modelcontextprotocol.io"
+          echo "Published io.github.Wordpressistic/bridgistic to registry.modelcontextprotocol.io"
 
       # The GitHub release goes last because it is the only step that is
       # editable afterwards — if npm or the registry had failed, nothing public

@@ -5,7 +5,7 @@
 - Repository: <https://github.com/Wordpressistic/bridgistic-claude-marketplace>
 - Workflow: `.github/workflows/release.yml`
 - npm package: <https://www.npmjs.com/package/bridgistic-mcp-server>
-- MCP Registry name: `io.github.wordpressistic/bridgistic`
+- MCP Registry name: `io.github.Wordpressistic/bridgistic`
 
 ## Trusted publishing
 
