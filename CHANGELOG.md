@@ -7,6 +7,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 Nothing yet.
 
+## [1.5.2] — 2026-10-05
+
+Maintenance release for the hosted OAuth connection flow and public product page.
+
+### Fixed
+
+- Retries the short Cloudflare KV propagation window after dynamic client registration so marketplace installs do not fail with a Worker 1101 page.
+- Returns a safe, readable authorization error for malformed or expired OAuth requests instead of leaking a Worker exception.
+
+### Changed
+
+- Simplified the public pricing section to the Free and Pro plans only.
+- Removed the Agency card and internal Paddle/product identifiers from visible pricing copy.
+
 ## [1.5.1] — 2026-10-05
 
 Corrective patch release for organization-owned MCP publishing.
