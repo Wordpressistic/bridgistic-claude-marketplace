@@ -2,13 +2,24 @@
 
 <p align="center"><img src="assets/bridgistic-logo.png" alt="Bridgistic — AI Control for WordPress" width="420"></p>
 
+> ## ➡️ This repository is frozen — historical release mirror only
+>
+> **All Bridgistic development — free and paid — continues at
+> [Wordpressistic/bridgistic](https://github.com/Wordpressistic/bridgistic).** That is the
+> canonical repo: latest plugin zip, docs, issues, releases, and the live site
+> [bridgistic.app](https://bridgistic.app). Do not open issues or PRs here.
+>
+> This mirror exists because the npm package `bridgistic-mcp-server` v1.5.2 and the MCP
+> Registry entry `io.github.Wordpressistic/bridgistic` still reference it for provenance.
+> The next release will re-point them to the canonical repo. Roles and rationale:
+> [docs/REPO-STRUCTURE.md in the canonical repo](https://github.com/Wordpressistic/bridgistic/blob/main/docs/REPO-STRUCTURE.md).
+
 Branding source files and distribution rules are documented in
 [docs/BRANDING.md](docs/BRANDING.md).
 
-This is the WordPressistic organization repository for the Bridgistic Claude marketplace,
-OpenAI plugin, Claude Desktop extension, MCP server, and release artifacts. npm publishing is
-configured through GitHub Actions trusted publishing; see
-[docs/NPM_TRUSTED_PUBLISHER.md](docs/NPM_TRUSTED_PUBLISHER.md).
+Release history note: npm publishing ran from this repository through v1.5.2 via GitHub
+Actions trusted publishing; see [docs/NPM_TRUSTED_PUBLISHER.md](docs/NPM_TRUSTED_PUBLISHER.md).
+It moves to the canonical repo with the next release.
 
 This is the single walkthrough to go from "I just installed the plugin" to "my AI assistant can
 safely read and edit my WordPress site." It's written for site owners, not developers — if
