@@ -45,6 +45,9 @@ on:
 
 jobs:
   deploy-cloud:
+    # FROZEN MIRROR: the worker deploys from Wordpressistic/bridgistic only, so a
+    # release or cloud-v* tag here cannot ship stale worker code.
+    if: ${{ github.repository == 'Wordpressistic/bridgistic' }}
     runs-on: ubuntu-latest
     defaults:
       run:
