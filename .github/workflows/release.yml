@@ -20,7 +20,10 @@ name: Release
 
 on:
   push:
-    tags: ["v*"]
+    # Product releases only; site-only tags (v1.5.2-site.N) are excluded.
+    tags:
+      - "v*"
+      - "!v*-site*"
   workflow_dispatch:
     inputs:
       version:
@@ -41,6 +44,11 @@ jobs:
   # ---------------------------------------------------------------------------
   preflight:
     name: Phase A — preflight
+    # FROZEN MIRROR: releases are cut from Wordpressistic/bridgistic only
+    # (docs/REPO-STRUCTURE.md there). Every job here is skipped in this repo so a
+    # stray tag can no longer fail a run or race the canonical npm publish.
+    # (Expression string comparison is case-insensitive.)
+    if: ${{ github.repository == 'Wordpressistic/bridgistic' }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.ver.outputs.version }}
@@ -233,7 +241,7 @@ jobs:
   publish:
     name: Phase C — publish
     needs: [preflight, build]
-    if: ${{ !inputs.dry_run }}
+    if: ${{ !inputs.dry_run && github.repository == 'Wordpressistic/bridgistic' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
