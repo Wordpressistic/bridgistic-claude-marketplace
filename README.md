@@ -1,200 +1,84 @@
-# Connecting Bridgistic — the complete guide
+<p align="center">
+  <a href="https://bridgistic.app"><img src="assets/bridgistic-logo.png" alt="Bridgistic" width="420"></a>
+</p>
 
-<p align="center"><img src="assets/bridgistic-logo.png" alt="Bridgistic — AI Control for WordPress" width="420"></p>
+<p align="center"><strong>Bridgistic for Claude and MCP marketplaces: safe AI control for WordPress, with scoped keys, signed requests, human approvals, snapshots and a full audit trail.</strong></p>
 
-> ## ➡️ This repository is frozen — historical release mirror only
->
-> **All Bridgistic development — free and paid — continues at
-> [Wordpressistic/bridgistic](https://github.com/Wordpressistic/bridgistic).** That is the
-> canonical repo: latest plugin zip, docs, issues, releases, and the live site
-> [bridgistic.app](https://bridgistic.app). Do not open issues or PRs here.
->
-> This mirror exists because the npm package `bridgistic-mcp-server` v1.5.2 and the MCP
-> Registry entry `io.github.Wordpressistic/bridgistic` still reference it for provenance.
-> The next release will re-point them to the canonical repo. Roles and rationale:
-> [docs/REPO-STRUCTURE.md in the canonical repo](https://github.com/Wordpressistic/bridgistic/blob/main/docs/REPO-STRUCTURE.md).
+<p align="center">
+  <a href="https://github.com/Wordpressistic/bridgistic-claude-marketplace/releases/latest"><img src="https://img.shields.io/github/v/release/Wordpressistic/bridgistic-claude-marketplace?label=release&color=2563eb" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--2.0--or--later-blue" alt="License: GPL-2.0-or-later"></a>
+  <img src="https://img.shields.io/badge/WordPress-6.4%2B-21759b?logo=wordpress&logoColor=white" alt="WordPress 6.4+">
+  <a href="https://www.npmjs.com/package/bridgistic-mcp-server"><img src="https://img.shields.io/npm/v/bridgistic-mcp-server?label=npm" alt="npm: bridgistic-mcp-server"></a>
+</p>
 
-Branding source files and distribution rules are documented in
-[docs/BRANDING.md](docs/BRANDING.md).
-
-Release history note: npm publishing ran from this repository through v1.5.2 via GitHub
-Actions trusted publishing; see [docs/NPM_TRUSTED_PUBLISHER.md](docs/NPM_TRUSTED_PUBLISHER.md).
-It moves to the canonical repo with the next release.
-
-This is the single walkthrough to go from "I just installed the plugin" to "my AI assistant can
-safely read and edit my WordPress site." It's written for site owners, not developers — if
-something below doesn't match what you see, jump to [Troubleshooting](#troubleshooting) or run
-**Bridgistic → Health Check** first.
-
-**Read this if:** you want the shortest, least error-prone path to a working connection.
-**Skip to a specific client's page** ([Claude Desktop](docs/CLAUDE_DESKTOP.md),
-[Claude Code](docs/CLAUDE_CODE.md), [Codex CLI](docs/CODEX_SETUP.md), [Gemini CLI](docs/GEMINI_SETUP.md),
-[ChatGPT](docs/CHATGPT_SETUP.md)) only if you already know which one you're using and want copy-paste
-config details.
+<p align="center">
+  <a href="https://bridgistic.app">Website</a> ·
+  <a href="https://github.com/Wordpressistic/bridgistic-claude-marketplace/releases/latest">Download</a> ·
+  <a href="https://github.com/Wordpressistic/bridgistic/blob/main/docs/CONNECT_BRIDGISTIC.md">Connection guide</a> ·
+  <a href="https://github.com/Wordpressistic/bridgistic">Source repository</a>
+</p>
 
 ---
 
-## Before you start: two ways to connect
+This is the **official marketplace listing repository** for [Bridgistic](https://bridgistic.app). It holds the Claude Code plugin marketplace, the Claude Desktop extension, the OpenAI agent-plugin package and the MCP server manifest that Claude and other plugin marketplaces install from. Each release here is a version sync of [Wordpressistic/bridgistic](https://github.com/Wordpressistic/bridgistic), carrying the same version and identical release assets (see `SHA256SUMS.txt`).
 
-Bridgistic has two ways to connect an AI assistant to your site.
+> Development, issues and pull requests live in **[Wordpressistic/bridgistic](https://github.com/Wordpressistic/bridgistic)**.
 
-| | Local connection (this guide) | Cloud connector |
-|---|---|---|
-| Status | **Live, fully supported, most-used path** | **Live, public beta** — no independent security review yet |
-| How it works | Your AI app runs a small server on your own computer that talks to your site | A hosted relay (`mcp.bridgistic.app`) brokers the connection with no local install |
-| Setup effort | One key to create, one app to configure | Paste one URL into your AI client, approve in WP Admin |
-| Works with | Claude Desktop, Claude Code, Codex CLI, Gemini CLI | ChatGPT and any other remote-only MCP client (also works with Claude's remote connector) |
+## What Bridgistic does
 
-**Use the local connection (below) if you're using Claude Desktop, Claude Code, Codex CLI, or
-Gemini CLI** — it's the most battle-tested path and never sends your credentials anywhere but
-between your own computer and your own site. **Use the cloud connector
-(WP Admin → Bridgistic → Bridgistic Cloud) only if your client can't run a local server** (ChatGPT
-is the main case) — it's functional but hasn't had an independent security review yet, so avoid it
-for sites you can't afford to risk, and prefer a Read-only or Content Manager preset over Developer
-Mode when you do use it. See [CLOUD_CONNECTOR.md](docs/CLOUD_CONNECTOR.md) for its full status.
+Bridgistic lets Claude, ChatGPT, OpenAI Codex, Gemini CLI or any other MCP client work on a WordPress site without an administrator password. You install the free WordPress plugin and create a least-privilege key. Every request is HMAC-signed and checked against that key's scopes. Destructive operations can be dry-run, held for your approval and snapshotted first, and every request is recorded in the audit log. The MCP server provides 54 tools for posts, media, users, plugins, options, files, the database, WooCommerce, playbooks, schedules and snapshots.
 
----
+## Install
 
-## The five-minute path (recommended for almost everyone)
+**First, the WordPress plugin.** Download `bridgistic-wordpress-plugin.zip` from the [latest release](https://github.com/Wordpressistic/bridgistic-claude-marketplace/releases/latest). Upload it under **Plugins → Add New → Upload Plugin** and activate it. Then create a **Read-only** key under **Bridgistic → AI / MCP Connections**.
 
-This is **Claude Desktop + the one-click extension** — the fewest steps, no terminal, no Node.js
-install.
+**Claude Desktop (one-click, no Node.js).** Download [`bridgistic.mcpb`](https://github.com/Wordpressistic/bridgistic-claude-marketplace/releases/latest/download/bridgistic.mcpb) and double-click it. When prompted, enter your site URL, Key ID and Secret.
 
-### Step 1 — Install the WordPress plugin
+**Claude Code (plugin marketplace).**
 
-1. Download `bridgistic-wordpress-plugin.zip` from the
-   [Releases page](https://github.com/wordpressistic/bridgistic/releases).
-2. In WordPress: **Plugins → Add New → Upload Plugin**, choose the zip, click **Install Now**,
-   then **Activate**.
-3. A new **Bridgistic** menu appears in your left sidebar. That confirms it worked — nothing on
-   your site's content or theme was touched.
+```text
+/plugin marketplace add Wordpressistic/bridgistic-claude-marketplace
+/plugin install bridgistic@bridgistic-marketplace
+```
 
-Before continuing, make sure:
-- Your site uses **HTTPS** (a plain `http://` address only works for local development sites).
-- **Settings → Permalinks** is set to anything other than "Plain."
+Then set `BRIDGISTIC_SITE_URL`, `BRIDGISTIC_KEY_ID` and `BRIDGISTIC_KEY_SECRET` in your environment.
 
-### Step 2 — Create a key
+**Other MCP clients.** Run `npx -y bridgistic-mcp-server` with the same three environment variables. Remote-only clients such as ChatGPT can connect through Bridgistic Cloud (public beta) from **WP Admin → Bridgistic → Bridgistic Cloud**.
 
-1. Go to **Bridgistic → AI / MCP Connections**.
-2. **Step 1 of the wizard:** choose **Claude Desktop Extension**.
-3. **Step 2:** choose a permission preset. Start with **Read-only** — you can widen this later
-   once you trust the connection; it cannot create, change, or delete anything on this preset.
-4. **Step 3:** click **Create key**.
-5. A **Key ID** (`wpk_…`) and a **Secret** (`wps_…`) appear. **Copy both somewhere safe right
-   now** — the secret is shown exactly once. If you navigate away before copying it, the key still
-   exists but you'll need to click **Rotate** to get a new secret.
+Verify any client by asking it to run `bridgistic_get_site_info`.
 
-### Step 3 — Install the extension in Claude Desktop
+## What's in this repository
 
-1. Download
-   [`bridgistic.mcpb`](https://github.com/wordpressistic/bridgistic/releases/latest/download/bridgistic.mcpb)
-   (there's also a direct download button on the wizard's Step 4).
-2. Double-click the downloaded file. Claude Desktop opens and asks to install the extension.
-3. Claude Desktop then prompts for three values — paste in what you copied in Step 2:
-   - **WordPress Site URL** — exactly as it appears in **WP Admin → Settings → General**
-     (e.g. `https://example.com`, no trailing slash)
-   - **Bridgistic Key ID**
-   - **Bridgistic Key Secret**
-4. Click **Enable**. The secret is stored securely by Claude Desktop itself — it is never written
-   to a plain text file.
+| Path | Listing |
+| --- | --- |
+| [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | Claude Code plugin marketplace (`bridgistic-marketplace`) |
+| [`plugins/bridgistic`](plugins/bridgistic) | Claude Code plugin: bundled MCP server, example configs and install scripts |
+| [`mcpb/manifest.json`](mcpb/manifest.json) | Claude Desktop extension (`bridgistic.mcpb`) |
+| [`openai-plugin`](openai-plugin) | OpenAI / ChatGPT agent-plugin package (Bridgistic Cloud) |
+| [`server.json`](server.json) | MCP Registry manifest (`io.github.Wordpressistic/bridgistic`) |
+| [`wordpress-plugin`](wordpress-plugin), [`mcp-server`](mcp-server), [`cloud`](cloud) | Synced source of the plugin, MCP server and cloud relay |
 
-### Step 4 — Verify it's working
+## Free and Pro
 
-1. In Claude Desktop, start a new chat and ask:
-   > Run bridgistic_get_site_info
-2. Claude should reply with your WordPress version, PHP version, active theme, and plugin list.
-3. Back in WordPress, open **Bridgistic → Logs** — you should see that request recorded. The
-   **Bridgistic → Dashboard** connection badge also flips from "Waiting for first request" to
-   "Connected."
+The plugin and MCP server are free and open source. Bridgistic Pro is available on [bridgistic.app](https://bridgistic.app) as a $29.99 Lifetime Deal welcome offer (1 license, 1 site; until 31 December 2026, 100 licenses only), or for $12/month or $99/year (1 license, 5 sites), billed through Paddle. See the site for current pricing and terms.
 
-That's it — done. If step 4 didn't work, go to [Troubleshooting](#troubleshooting).
+## Support and security
+
+- Questions and bugs: [Wordpressistic/bridgistic issues](https://github.com/Wordpressistic/bridgistic/issues)
+- Security reports: **hello@insightistic.com** (see [SECURITY.md](SECURITY.md)); please don't open public issues for them
+- Purchases and refunds: support@wpistic.com
+
+## License
+
+[GPL-2.0-or-later](LICENSE).
 
 ---
 
-## Using a different AI client
-
-The plugin's setup wizard (**Bridgistic → AI / MCP Connections**) generates ready-to-paste configuration
-for each of these — pick your client on Step 1 of the wizard, then follow its guide for the
-one-time setup around it (installing the CLI/app itself, where its config file lives, restarting
-it):
-
-| Client | Runs locally? | Guide |
-|---|---|---|
-| Claude Desktop (manual config, no extension) | Yes | [CLAUDE_DESKTOP.md](docs/CLAUDE_DESKTOP.md) |
-| Claude Code | Yes | [CLAUDE_CODE.md](docs/CLAUDE_CODE.md) |
-| OpenAI Codex CLI | Yes | [CODEX_SETUP.md](docs/CODEX_SETUP.md) |
-| Gemini CLI | Yes | [GEMINI_SETUP.md](docs/GEMINI_SETUP.md) |
-| ChatGPT | No — remote only | [CHATGPT_SETUP.md](docs/CHATGPT_SETUP.md) (uses the cloud connector, a free public beta) |
-| Anything else that speaks MCP | Depends | Use the wizard's "Manual MCP JSON" option |
-
-All of the "runs locally" options follow the same shape as the extension path above, with one
-extra manual step: you paste a JSON snippet into that client's own config file, and you need
-Node.js 20+ installed (`node --version` to check) unless you're using the pre-built extension.
-The wizard's Step 4 generates the exact JSON for you, and **Bridgistic → Export Package**
-downloads it as a ready-made zip with install scripts.
-
-**Important — what "Test connection" in the wizard actually checks:** Step 5's "Run test" button
-only confirms your WordPress site and key are configured correctly on the server side. It does
-**not** confirm your AI client is set up right — that's what Step 4 above (asking Claude to run a
-tool) is for. Don't stop at a green "Run test" result and assume you're fully connected; always
-do the "ask Claude to run bridgistic_get_site_info" check too.
-
-**Managing more than one WordPress site?** See [CONNECT_OTHER_AI.md](docs/CONNECT_OTHER_AI.md) for the
-multi-site `connections.json` registry — one key per site, one shared config file.
-
----
-
-## Understanding what you just gave access to
-
-- **Scoped, not all-powerful.** The key you created only allows what its permission preset says
-  (Read-only / Content Manager / Safe Admin / Developer Mode). Check **Bridgistic → Keys &
-  Scopes** any time to see or change this.
-- **Every request is logged.** **Bridgistic → Logs** shows exactly what was requested, when, and
-  by which key.
-- **Destructive actions can require your approval.** If your preset includes approvals, risky
-  operations pause in **Bridgistic → Approvals** until you personally allow them.
-- **Changes can be undone.** Before any destructive write, Bridgistic automatically snapshots the
-  affected data — **Bridgistic → Snapshots** lets you restore with one click.
-- **You can revoke access instantly.** **Bridgistic → Keys & Scopes → Revoke** disables a key
-  immediately; nothing further can be done with it.
-
----
-
-## Troubleshooting
-
-Run **Bridgistic → Health Check** first — it runs 16 diagnostics and tells you exactly what's
-wrong and how to fix it. The most common issues:
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| "Run test" fails in the wizard | REST API blocked, permalinks set to "Plain," or clock drift between server and your computer | Health Check names the exact failing check and its fix |
-| Claude says the tool doesn't exist / times out | The extension/config wasn't restarted after setup, or the site URL has a typo | Fully quit and reopen your AI client; double-check the site URL has no trailing slash and matches Settings → General exactly |
-| "Invalid signature" or "Unauthorized" errors | The secret was mistyped, or the key was rotated/revoked since you configured it | Recreate or rotate the key in **Keys & Scopes**, and re-paste the new secret into your AI client |
-| Nothing appears in Logs after asking Claude to run a tool | Your AI client isn't actually using this key — check its own MCP server list/settings | Re-check the config was pasted into the right file and the client was restarted |
-| A hosting firewall (WAF) is blocking requests | Some managed WordPress hosts block unfamiliar REST API traffic | Health Check's "REST API reachable" and "WAF interference" checks flag this with host-specific guidance |
-
-Full diagnostic reference: `plugins/bridgistic/package/TROUBLESHOOTING.md`. Still stuck? Open a
-[GitHub issue](https://github.com/wordpressistic/bridgistic/issues) or copy
-the no-secrets debug report from **Bridgistic → Health Check** into it.
-
----
-
-## FAQ
-
-**Do I need to know how to code?** No. The five-minute path above involves no terminal and no file
-editing.
-
-**Is my API key/password shared with Claude, WordPress.com, or Anthropic?** No. The key lives only
-between your AI client (running on your own computer) and your own WordPress site. Bridgistic
-never sends it anywhere else.
-
-**What if I lose the secret?** You can't view it again, but nothing is broken — go to
-**Keys & Scopes** and click **Rotate** to generate a fresh secret, then re-paste it into your AI
-client.
-
-**Can I use this on more than one site?** Yes — **WP Admin → Bridgistic → Multi-Site** is a guided builder for the config file this needs. See [CONNECT_OTHER_AI.md](docs/CONNECT_OTHER_AI.md) for details.
-
-**Can I just paste one cloud URL like some other tools?** Yes — that's
-**WP Admin → Bridgistic → Bridgistic Cloud**. It's live and free, but hasn't had an independent
-security review yet, so the local connection above is still the recommended default for most
-people. See [CLOUD_CONNECTOR.md](docs/CLOUD_CONNECTOR.md) for its current state.
+<p align="center">
+  Built by <strong>WordPressistic LLC</strong>, 1209 Mountain Road PL NE, STE N, Albuquerque, NM 87110, United States<br>
+  <a href="https://bridgistic.app">bridgistic.app</a> ·
+  <a href="https://github.com/wordpressistic">GitHub</a> ·
+  <a href="https://x.com/wordpressistic">X</a> ·
+  <a href="https://www.linkedin.com/company/wordpressistic">LinkedIn</a> ·
+  <a href="https://www.youtube.com/@wordpressistic">YouTube</a>
+</p>
