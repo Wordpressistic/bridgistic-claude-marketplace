@@ -51,6 +51,24 @@ final class Plugin {
 			}
 		);
 
+		// Let a browser dashboard (dashboard.bridgistic.app, the legacy
+		// app.bridgistic.app, or a local preview) send the signed headers. WordPress core already echoes the Origin; this
+		// only adds header names to the preflight allow-list. Auth is still
+		// the HMAC signature, never a cookie.
+		add_filter(
+			'rest_allowed_cors_headers',
+			static function ( array $headers ): array {
+				return array_merge( $headers, array( 'X-Bridgistic-Key', 'X-Bridgistic-Timestamp', 'X-Bridgistic-Nonce', 'X-Bridgistic-Signature', 'X-Bridgistic-Request-Id' ) );
+			}
+		);
+
+		// Explicitly allow the hosted dashboard origins on the Bridgistic
+		// namespace. Core normally echoes any Origin, but some sites (security
+		// or "private API" plugins) strip Access-Control-Allow-Origin from REST
+		// responses, which breaks the dashboard's live mode. No credentials are
+		// allowed: auth is the HMAC signature, never a cookie.
+		add_filter( 'rest_pre_serve_request', array( self::class, 'send_dashboard_cors' ), 99, 3 );
+
 		// Admin UI: dashboard, Claude setup, keys, health, logs, snapshots,
 		// playbooks, export, premium overview, settings.
 		if ( is_admin() ) {
@@ -125,14 +143,22 @@ final class Plugin {
 			wp_mkdir_p( $dir );
 		}
 
-		// Block direct web execution of anything inside the sandbox.
-		$htaccess = $dir . '/.htaccess';
-		if ( ! file_exists( $htaccess ) ) {
-			file_put_contents( $htaccess, "Require all denied\n<FilesMatch \".*\">\nRequire all denied\n</FilesMatch>\n" ); // phpcs:ignore
-		}
-		$index = $dir . '/index.php';
-		if ( ! file_exists( $index ) ) {
-			file_put_contents( $index, "<?php // Silence is golden.\n" ); // phpcs:ignore
+		// Block direct web access to anything inside the sandbox. These files
+		// are re-asserted on every call (not just created once) so a tampered
+		// copy is repaired, and the bridge refuses to write or delete them
+		// (FsController). Apache/LiteSpeed read .htaccess, IIS reads
+		// web.config; nginx reads neither, which is why every sandbox PHP file
+		// also carries an ABSPATH guard (FsController::sandbox_php_guard()).
+		$guards = array(
+			'.htaccess'  => "Require all denied\n<FilesMatch \".*\">\nRequire all denied\n</FilesMatch>\n<IfModule mod_php.c>\nphp_flag engine off\n</IfModule>\n<IfModule mod_php7.c>\nphp_flag engine off\n</IfModule>\n<IfModule mod_php8.c>\nphp_flag engine off\n</IfModule>\n",
+			'web.config' => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<configuration><system.webServer><authorization><deny users=\"*\" /></authorization><handlers><clear /></handlers></system.webServer></configuration>\n",
+			'index.php'  => "<?php // Silence is golden.\n",
+		);
+		foreach ( $guards as $name => $body ) {
+			$file = $dir . '/' . $name;
+			if ( ! file_exists( $file ) || (string) @file_get_contents( $file ) !== $body ) { // phpcs:ignore
+				file_put_contents( $file, $body ); // phpcs:ignore
+			}
 		}
 
 		return $dir;
@@ -143,5 +169,51 @@ final class Plugin {
 	 */
 	public function cleanup(): void {
 		AuditLog::prune();
+	}
+
+	/**
+	 * Origins of the hosted Bridgistic dashboard.
+	 *
+	 * @return string[]
+	 */
+	public static function dashboard_origins(): array {
+		$origins = array( 'https://dashboard.bridgistic.app', 'https://app.bridgistic.app' );
+		/**
+		 * Filter the browser origins allowed to call the Bridgistic REST namespace.
+		 *
+		 * @param string[] $origins Exact origins (scheme + host [+ port]).
+		 */
+		if ( function_exists( 'apply_filters' ) ) {
+			$origins = (array) apply_filters( 'bridgistic_dashboard_origins', $origins );
+		}
+		return array_values( array_filter( $origins, 'is_string' ) );
+	}
+
+	/**
+	 * Whether a request to $route from $origin should get the dashboard CORS header.
+	 */
+	public static function dashboard_cors_origin( string $route, string $origin ): string {
+		if ( '' === $origin || 0 !== strpos( $route, '/bridgistic/v1' ) ) {
+			return '';
+		}
+		return in_array( $origin, self::dashboard_origins(), true ) ? $origin : '';
+	}
+
+	/**
+	 * @param mixed            $served  Whether the request was already served.
+	 * @param mixed            $result  Result.
+	 * @param \WP_REST_Request $request Request.
+	 * @return mixed
+	 */
+	public static function send_dashboard_cors( $served, $result, $request ) {
+		if ( headers_sent() || ! $request instanceof \WP_REST_Request ) {
+			return $served;
+		}
+		$origin = self::dashboard_cors_origin( (string) $request->get_route(), (string) get_http_origin() );
+		if ( '' !== $origin ) {
+			header( 'Access-Control-Allow-Origin: ' . $origin, true );
+			header( 'Vary: Origin', false );
+		}
+		return $served;
 	}
 }
