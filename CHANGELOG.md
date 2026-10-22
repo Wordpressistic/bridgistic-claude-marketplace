@@ -5,6 +5,29 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.4] — 2026-10-20
+
+### Added
+
+- A live WPistic license on the site opens unlimited schedules, snapshots past 50 and `GET /wp-json/bridgistic/v1/audit/export`.
+- Scoped dashboard license routes for activation, validation, deactivation and status; raw license keys are never stored and responses are signature-verified.
+
+### Changed
+
+- Pricing now presents Lifetime $49, monthly $12 and yearly $99 choices without a pre-checkout email field.
+- Product copy distinguishes the three shipped license gates from the skills marketplace, agency dashboard, team permissions, white-label and Cloud Agent credits, which remain closed or outside the license.
+
+### Fixed
+
+- Feature gating no longer opens coming-soon marketplace, agency or team lines when a license is active.
+
+### Documentation
+
+- New product README. Added CONTRIBUTING.md, CODE_OF_CONDUCT.md, issue and pull-request templates, and docs/RELEASING.md.
+- SECURITY.md: reports now go to hello@insightistic.com.
+- docs/REPO-STRUCTURE.md describes `bridgistic-claude-marketplace` as the official marketplace listing repo. docs/PAGES_RELEASES.md documents the Cloudflare Pages deploy.
+- readme.txt: shorter summary, five tags, an External services section and a 1.5.3 upgrade notice.
+
 ## [1.5.3] — 2026-10-19
 
 Security release addressing the October 2026 baseline audit (S1–S5), plus the plugin endpoints used by the hosted Bridgistic dashboard.

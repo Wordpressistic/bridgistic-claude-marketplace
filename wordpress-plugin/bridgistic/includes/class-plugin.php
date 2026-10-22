@@ -85,8 +85,7 @@ final class Plugin {
 		// Scheduled playbooks: register custom cron intervals + the run hook.
 		Scheduler::boot();
 
-		// Initialise the free-edition feature policy. This is intentionally a
-		// local no-op: the public plugin has no billing or license unlock path.
+		// Feature policy. Paid lines stay closed until LicenseLink reports a live key.
 		License::init();
 	}
 
@@ -212,6 +211,8 @@ final class Plugin {
 		$origin = self::dashboard_cors_origin( (string) $request->get_route(), (string) get_http_origin() );
 		if ( '' !== $origin ) {
 			header( 'Access-Control-Allow-Origin: ' . $origin, true );
+			header( 'Access-Control-Allow-Headers: Authorization, X-WP-Nonce, Content-Disposition, Content-MD5, Content-Type, X-Bridgistic-Key, X-Bridgistic-Timestamp, X-Bridgistic-Nonce, X-Bridgistic-Signature, X-Bridgistic-Request-Id', true );
+			header( 'Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE', true );
 			header( 'Vary: Origin', false );
 		}
 		return $served;

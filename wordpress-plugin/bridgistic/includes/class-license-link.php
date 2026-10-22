@@ -4,7 +4,9 @@
  *
  * Restores license activation for the Bridgistic dashboard without changing
  * the free-only feature policy in class-license.php: an active license is
- * recorded and verified here, but no plugin capability is gated on it.
+ * recorded and verified here. License::gate() reads this status. A live
+ * activation (active, trialing, or grace) opens the three shipped paid
+ * lines. Product lines still marked coming soon remain closed.
  *
  * Contract (WPistic Control Plane API spec, "Licenses"):
  *   POST /licenses/activate   {key, domain, installation_uuid, site_url, home_url, environment, product_version, wp_version, php_version}
