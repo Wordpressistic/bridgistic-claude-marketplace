@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.6] — 2026-10-23
+
+### Synced
+
+- Listing snap of Wordpressistic/bridgistic v1.5.6: the version constant now derives from the plugin header (1.5.5 shipped 1.5.5 code reporting 1.5.4), and every bridge response is marked no-store after a host edge was found caching authenticated GET responses by URL.
+
 ## [1.5.5] — 2026-10-23
 
 ### Synced
