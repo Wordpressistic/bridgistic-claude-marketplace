@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.7] — 2026-10-23
+
+### Synced
+
+- Listing snap of Wordpressistic/bridgistic v1.5.7: zero-step dashboard pairing (the plugin pushes an auto-paired dashboard key to the license server) and the live Skills Marketplace card on the Premium screen.
+
 ## [1.5.6] — 2026-10-23
 
 ### Synced
