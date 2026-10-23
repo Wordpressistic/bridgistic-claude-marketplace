@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.5] — 2026-10-23
+
+### Synced
+
+- Listing snap of Wordpressistic/bridgistic v1.5.5: the plugin gains license activation in WP Admin (Premium Features → License) and the Bridgistic console as the default license endpoint. marketplace.json and the bundled plugin read 1.5.5.
+
 ## [1.5.4] — 2026-10-20
 
 ### Added
