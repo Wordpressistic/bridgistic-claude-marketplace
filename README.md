@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://bridgistic.app"><img src="assets/bridgistic-logo.png" alt="Bridgistic" width="420"></a>
+  <a href="https://bridgistic.app"><img src="https://bridgistic.app/assets/bridgistic-logo.png" alt="Bridgistic" width="420"></a>
 </p>
 
 <p align="center"><strong>Bridgistic for Claude and MCP marketplaces: safe AI control for WordPress, with scoped keys, signed requests, human approvals, snapshots and a full audit trail.</strong></p>
@@ -20,7 +20,7 @@
 
 ---
 
-This is the **official marketplace listing repository** for [Bridgistic](https://bridgistic.app). It holds the Claude Code plugin marketplace, the Claude Desktop extension, the OpenAI agent-plugin package and the MCP server manifest that Claude and other plugin marketplaces install from. Each release here is a version sync of [Wordpressistic/bridgistic](https://github.com/Wordpressistic/bridgistic), carrying the same version and identical release assets (see `SHA256SUMS.txt`).
+This is the **official marketplace listing repository** for [Bridgistic](https://bridgistic.app). It holds the Claude Code plugin marketplace listing that `/plugin marketplace add Wordpressistic/bridgistic-claude-marketplace` installs from. Each listing sync here is a version snap of [Wordpressistic/bridgistic](https://github.com/Wordpressistic/bridgistic), the source repository of the WordPress plugin.
 
 > Development, issues and pull requests live in **[Wordpressistic/bridgistic](https://github.com/Wordpressistic/bridgistic)**.
 
@@ -30,9 +30,9 @@ Bridgistic lets Claude, ChatGPT, OpenAI Codex, Gemini CLI or any other MCP clien
 
 ## Install
 
-**First, the WordPress plugin.** Download `bridgistic-wordpress-plugin.zip` from the [latest release](https://github.com/Wordpressistic/bridgistic-claude-marketplace/releases/latest). Upload it under **Plugins → Add New → Upload Plugin** and activate it. Then create a **Read-only** key under **Bridgistic → AI / MCP Connections**.
+**First, the WordPress plugin.** Download `bridgistic-wordpress-plugin.zip` from the [latest release](https://github.com/Wordpressistic/bridgistic/releases/latest) or from [bridgistic.app](https://bridgistic.app). Upload it under **Plugins → Add New → Upload Plugin** and activate it. Then create a **Read-only** key under **Bridgistic → AI / MCP Connections**.
 
-**Claude Desktop (one-click, no Node.js).** Download [`bridgistic.mcpb`](https://github.com/Wordpressistic/bridgistic-claude-marketplace/releases/latest/download/bridgistic.mcpb) and double-click it. When prompted, enter your site URL, Key ID and Secret.
+**Claude Desktop (one-click, no Node.js).** Download [`bridgistic.mcpb`](https://github.com/Wordpressistic/bridgistic/releases/latest/download/bridgistic.mcpb) and double-click it. When prompted, enter your site URL, Key ID and Secret.
 
 **Claude Code (plugin marketplace).**
 
@@ -53,14 +53,10 @@ Verify any client by asking it to run `bridgistic_get_site_info`.
 | --- | --- |
 | [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | Claude Code plugin marketplace (`bridgistic-marketplace`) |
 | [`plugins/bridgistic`](plugins/bridgistic) | Claude Code plugin: bundled MCP server, example configs and install scripts |
-| [`mcpb/manifest.json`](mcpb/manifest.json) | Claude Desktop extension (`bridgistic.mcpb`) |
-| [`openai-plugin`](openai-plugin) | OpenAI / ChatGPT agent-plugin package (Bridgistic Cloud) |
-| [`server.json`](server.json) | MCP Registry manifest (`io.github.Wordpressistic/bridgistic`) |
-| [`wordpress-plugin`](wordpress-plugin), [`mcp-server`](mcp-server), [`cloud`](cloud) | Synced source of the plugin, MCP server and cloud relay |
 
 ## Free and Pro
 
-The plugin and MCP server are free and open source. Bridgistic Pro is available on [bridgistic.app](https://bridgistic.app) as a $29.99 Lifetime Deal welcome offer (1 license, 1 site; until 31 December 2026, 100 licenses only), or for $12/month or $99/year (1 license, 5 sites), billed through Paddle. See the site for current pricing and terms.
+The plugin and MCP server are free and open source. Bridgistic Pro is available on [bridgistic.app](https://bridgistic.app) as a $49.99 Lifetime Deal welcome offer (1 license, 1 site; until 31 December 2026, 100 licenses only), or for $12/month or $99/year (1 license, 5 sites), billed through Paddle. See the site for current pricing and terms.
 
 ## Support and security
 
