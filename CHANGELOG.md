@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.8] — 2026-10-23
+
+### Synced
+
+- Listing snap of Wordpressistic/bridgistic v1.5.8: license-aware admin branding (the header shows the live plan instead of Free Local MCP Version on licensed sites).
+
 ## [1.5.7] — 2026-10-23
 
 ### Synced
