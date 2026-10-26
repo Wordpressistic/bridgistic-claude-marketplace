@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.10] — 2026-10-26
+
+### Synced
+
+- Listing snap of Wordpressistic/bridgistic v1.5.10: daily license re-validation (WP-Cron), uninstall releases the license seat, and Pro licenses now cover 3 sites (Lifetime Deal covers 1).
+
 ## [1.5.9] — 2026-10-26
 
 ### Synced
