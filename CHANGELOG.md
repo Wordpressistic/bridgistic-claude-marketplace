@@ -5,6 +5,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.9] — 2026-10-26
+
+### Synced
+
+- Listing snap of Wordpressistic/bridgistic v1.5.9: WordPress Plugin Check clean (60 errors and 151 warnings to zero) and PHP execution moved off eval() into the hardened sandbox.
+
 ## [1.5.8] — 2026-10-23
 
 ### Synced
