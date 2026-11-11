@@ -5,6 +5,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.11] — 2026-11-11
+
+### Synced
+
+- Listing synced to Wordpressistic/bridgistic v1.5.11:
+  - Free plan monthly allowance of 5,000 AI requests per site. Over the limit, requests get HTTP 402 `bridgistic_free_limit_reached` with the reset date and the Pro upgrade link.
+  - Plan & usage panel on Settings and an admin upgrade notice.
+  - Pro ($12/month or $99/year) has no monthly cap.
+
 ## [1.5.10] — 2026-10-26
 
 ### Synced
