@@ -30,7 +30,7 @@ Bridgistic lets Claude, ChatGPT, OpenAI Codex, Gemini CLI or any other MCP clien
 
 ## Install
 
-**First, the WordPress plugin.** Download `bridgistic-wordpress-plugin.zip` from the [latest release](https://github.com/Wordpressistic/bridgistic/releases/latest) or from [bridgistic.app](https://bridgistic.app). Upload it under **Plugins → Add New → Upload Plugin** and activate it. Then create a **Read-only** key under **Bridgistic → AI / MCP Connections**.
+**First, the WordPress plugin.** Download the `bridgistic-wordpress-plugin-<version>.zip` asset from the [latest release](https://github.com/Wordpressistic/bridgistic/releases/latest) or from [bridgistic.app](https://bridgistic.app). Upload it under **Plugins → Add New → Upload Plugin** and activate it. Then create a **Read-only** key under **Bridgistic → AI / MCP Connections**.
 
 **Claude Desktop (one-click, no Node.js).** Download [`bridgistic.mcpb`](https://github.com/Wordpressistic/bridgistic/releases/latest/download/bridgistic.mcpb) and double-click it. When prompted, enter your site URL, Key ID and Secret.
 
