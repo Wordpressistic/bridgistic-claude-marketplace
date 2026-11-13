@@ -5,6 +5,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/) · Versioning: [SemVer](
 
 ## [Unreleased]
 
+## [1.5.15] — 2026-11-13
+
+### Synced
+
+- Refreshed the official Claude Code marketplace listing against the canonical `Wordpressistic/bridgistic` v1.5.14 release.
+- Updated the marketplace and plugin manifest versions to 1.5.15 because this repository's public v1.5.14 tag is already published and cannot be moved safely.
+- The Claude bundle remains functionally unchanged from v1.5.11; the canonical v1.5.12–v1.5.14 changes were limited to the WordPress plugin and release packaging.
+
 ## [1.5.11] — 2026-11-11
 
 ### Synced
